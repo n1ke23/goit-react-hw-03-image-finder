@@ -11,7 +11,7 @@ class App extends Component {
   state = {
     images: [],
     loading: false,
-    shwModal: false,
+    showModal: false,
     searchQuery: "",
     error: null,
     page: 1,
@@ -32,7 +32,7 @@ class App extends Component {
     if (prevQuery !== nextQuery) {
       this.fetchImages();
     }
-    if (this.state.page > 2) {
+    if (this.state.page > 2 && !this.state.showModal) {
       this.scrolling();
     }
   }
@@ -56,7 +56,7 @@ class App extends Component {
   };
 
   parseLargeImage = (url) => {
-    this.setState((prev) => {
+    this.setState(() => {
       return {
         largeImage: url,
       };
@@ -75,9 +75,7 @@ class App extends Component {
       <div>
         <Searchbar onSubmit={this.hendleSearchFormSubmit} />
 
-        {loader ? (
-          <LoaderSpinner />
-        ) : (
+     
             <ImageGallery>
               <ImageGalleryItem
                 parseLargeImage={this.parseLargeImage}
@@ -85,10 +83,12 @@ class App extends Component {
                 toggleModal={this.toggleModal}
               />
             </ImageGallery>
-          )}
+          
 
-        {images.length > 0 && !loader && (
-          <Button fetchImages={this.fetchImages} />
+      
+             {loader ? (
+               <LoaderSpinner />
+            ) : (!!images.length &&  <Button fetchImages={this.fetchImages} />
         )}
 
         {showModal && (
